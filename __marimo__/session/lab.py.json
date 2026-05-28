@@ -1,0 +1,107 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.8",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "01b49a4d0d2da46860d2410422b45bbb",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "KazN",
+      "code_hash": "df0ad02ef69e88dd9e2f6bb5ac4a9286",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "     Credentialed Accounts\nACTIVE  ACCOUNT\n*       lucas.rios@devoteam.com\n\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "HtKj",
+      "code_hash": "440774d9bd050eb331dfe0e7009f9535",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "Operation failed: {'code': 6, 'message': 'Operation execution failed: Some individual resources failed to be imported; see logs URL for more details.'}",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Import gs://spls/gsp626/LungCT-Diagnosis/R_004/* -> dicom_source\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_91875/__marimo__cell_HtKj_.py&quot;</span>, line <span class=\"m\">2</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">lab</span><span class=\"o\">.</span><span class=\"n\">import_data</span><span class=\"p\">(</span><span class=\"s2\">&quot;gs://spls/gsp626/LungCT-Diagnosis/R_004/*&quot;</span><span class=\"p\">)</span>\n  File <span class=\"nb\">&quot;/home/l/Documents/wrk/healthcare_api/dicomlab.py&quot;</span>, line <span class=\"m\">159</span>, in <span class=\"n\">import_data</span>\n<span class=\"w\">    </span><span class=\"k\">return</span> <span class=\"bp\">self</span><span class=\"o\">.</span><span class=\"n\">_wait</span><span class=\"p\">(</span><span class=\"n\">op</span><span class=\"p\">[</span><span class=\"s2\">&quot;name&quot;</span><span class=\"p\">])</span> <span class=\"k\">if</span> <span class=\"n\">wait</span> <span class=\"k\">else</span> <span class=\"n\">op</span>\n<span class=\"w\">           </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/l/Documents/wrk/healthcare_api/dicomlab.py&quot;</span>, line <span class=\"m\">129</span>, in <span class=\"n\">_wait</span>\n<span class=\"w\">    </span><span class=\"k\">raise</span> <span class=\"ne\">RuntimeError</span><span class=\"p\">(</span><span class=\"sa\">f</span><span class=\"s2\">&quot;Operation failed: </span><span class=\"si\">{</span><span class=\"n\">op</span><span class=\"p\">[</span><span class=\"s1\">&#39;error&#39;</span><span class=\"p\">]</span><span class=\"si\">}</span><span class=\"s2\">&quot;</span><span class=\"p\">)</span>\n<span class=\"gr\">RuntimeError</span>: <span class=\"n\">Operation failed: {&#39;code&#39;: 6, &#39;message&#39;: &#39;Operation execution failed: Some individual resources failed to be imported; see logs URL for more details.&#39;}</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "VUeH",
+      "code_hash": "d25b3a0146edf41ffb51a325decba88c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<pre class='text-xs'>0</pre>"
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "dicom_source: 68 instance(s)\ndicom_deid: 0 instance(s)\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "fkSU",
+      "code_hash": "40126784e5f26d981c72ffa828a6d5ed",
+      "outputs": [],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Rendered first instance of dicom_source -> dicom_source_first.png\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "MJUe",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    }
+  ]
+}
