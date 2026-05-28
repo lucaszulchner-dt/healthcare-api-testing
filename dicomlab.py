@@ -120,19 +120,43 @@ class DicomLab:
 
     # ------------------------------------------------------------- LRO poll
     def _wait(self, op_name: str, timeout: int = 1200, poll: int = 5) -> dict:
+        """Poll a long-running operation.
+
+        Behaviour on completion:
+          - success>0, failure=0          -> "done. success=N failure=0"
+          - success=0, failure>0          -> "no new records ..." (e.g. all
+                                             files already existed; not raised)
+          - success>0 AND failure>0       -> "partial: success=X failure=Y"
+          - success=0 AND no counters     -> raise (operation truly failed)
+        The op dict is always returned so callers can inspect counters.
+        """
         ops = self.client.projects().locations().datasets().operations()
         start = time.time()
         while True:
             op = ops.get(name=op_name).execute()
             if op.get("done"):
-                if op.get("error"):
-                    raise RuntimeError(f"Operation failed: {op['error']}")
                 counter = op.get("metadata", {}).get("counter", {})
-                print(
-                    f"  done. success={counter.get('success', '?')} "
-                    f"failure={counter.get('failure', '?')}"
-                )
+                success = int(counter.get("success", 0))
+                failure = int(counter.get("failure", 0))
+                has_error = bool(op.get("error"))
+
+                if success == 0 and failure == 0 and has_error:
+                    # No per-resource counters at all -> a genuine job failure.
+                    raise RuntimeError(f"Operation failed: {op['error']}")
+
+                if success == 0 and failure > 0:
+                    # Nothing new was written. Most common cause on re-import:
+                    # every instance already exists (the API ignores duplicates,
+                    # but reports them as per-file failures).
+                    print(f"  no new records (failure={failure}, success=0) — "
+                          f"likely all already present; nothing changed.")
+                elif failure > 0:
+                    print(f"  partial: success={success} failure={failure} — "
+                          f"some resources were skipped/failed.")
+                else:
+                    print(f"  done. success={success} failure={failure}")
                 return op
+
             if time.time() - start > timeout:
                 raise TimeoutError(f"Timed out waiting for {op_name}")
             time.sleep(poll)
