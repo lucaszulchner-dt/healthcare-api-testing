@@ -17,7 +17,7 @@ def _():
         deid_store   = "dicom_deid",
         export_bucket= "lucas-rios-sandbox-dicom-export",
     )
-    return DicomLab, lab, mo
+    return lab, mo
 
 
 @app.cell
@@ -41,36 +41,28 @@ def _(lab):
 
 
 @app.cell
-def _(lab):
-    lab.count_instances("dicom_source")    
-    lab.count_instances("dicom_deid")    
-    return
-
-
-@app.cell
 def _(lab, mo):
+    # show image
     path = lab.render_first()
     mo.image(path)
     return
 
 
 @app.cell
-def _(DicomLab):
-    lab = DicomLab(
-        project_id   = "lucas--rios-sandbox",
-        location     = "eu",
-        dataset_id   = "healthcare_api_dataset",
-        source_store = "dicom_source",
-        deid_store   = "dicom_deid",
-        export_bucket= "lucas-rios-sandbox-dicom-export",
-    )
+def _(lab):
+    lab.clear_store("dicom_source")  
+    return
 
-    # 1. load sample data
-    lab.import_data("gs://spls/gsp626/LungCT-Diagnosis/R_004/*")
-    lab.count_instances()                 # how many images landed
 
-    # 2. view BEFORE
-    lab.render_first()                    # -> dicom_source_first.png (shown inline)
+@app.cell
+def _(lab):
+    lab.count_instances("dicom_source")    
+    return
+
+
+@app.cell
+def _(lab):
+
 
     # 3. de-identify into the deid store, then view AFTER
     lab.deidentify(redact_all_text=True)
@@ -88,7 +80,7 @@ def _(DicomLab):
     # housekeeping
     lab.clear_store("dicom_source")       # delete all studies in a store
     lab.clear_export("export_all")        # wipe a GCS export prefix
-    return (lab,)
+    return
 
 
 if __name__ == "__main__":
