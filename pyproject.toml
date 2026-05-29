@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "gcsfs>=2026.5.0",
     "google-api-python-client>=2.196.0",
     "google-auth>=2.53.0",
     "google-cloud-bigquery>=3.41.0",
@@ -13,5 +14,6 @@ dependencies = [
     "ipython>=9.13.0",
     "jupyter>=1.1.1",
     "marimo>=0.23.8",
+    "pydicom>=3.0.2",
     "requests>=2.34.2",
 ]

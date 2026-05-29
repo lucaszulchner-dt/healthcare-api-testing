@@ -34,9 +34,24 @@ def _():
 
 @app.cell
 def _(lab):
+    #c check instances
+    lab.count_instances("dicom_source")    
+    return
+
+
+@app.cell
+def _(lab):
+    lab.clear_store("dicom_source") 
+    lab.count_instances("dicom_source")    
+    return
+
+
+@app.cell
+def _(lab):
     # 1. load sample data
-    lab.import_data("gs://spls/gsp626/LungCT-Diagnosis/R_004/*") 
-    lab.count_instances("dicom_source")                 # how many images landed
+    lab.import_data("gs://dicom-data-source/pseudo_phi_dicom_data/**") 
+    #importing about 600mb -> 43 seconds, same time if duplicate data checks don't get faster
+    lab.count_instances("dicom_source")                 # how many instances landed
     return
 
 
@@ -45,6 +60,13 @@ def _(lab, mo):
     # show image
     path = lab.render_first()
     mo.image(path)
+    return
+
+
+@app.cell
+def _(mo):
+
+    mo.image("mg_10.png")
     return
 
 

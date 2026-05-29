@@ -482,3 +482,42 @@ class DicomLab:
                 n = f"error: {e}"
             print(f"store   : {sid:<20} {n} instance(s)")
         print("=" * 50)
+
+    # =================================================================
+    #  INDEX / PATH HELPERS  (add inside class DicomLab)
+    # =================================================================
+
+    def get_path(self, index, store_id=None):
+        """Return the (study, series, instance) UID triple for the instance
+        at `index` in a store."""
+        sid = store_id or self.source_store_id
+        insts = self.list_all_instances(sid)
+        if index < 0 or index >= len(insts):
+            raise IndexError(
+                f"index {index} out of range ({sid} has {len(insts)} instances)"
+            )
+        i = insts[index]
+        return (
+            i[_TAG_STUDY]["Value"][0],
+            i[_TAG_SERIES]["Value"][0],
+            i[_TAG_INSTANCE]["Value"][0],
+        )
+
+    def render_path(self, path, store_id=None, out_path=None, show=True):
+        """Render an instance given its (study, series, instance) UID triple,
+        from any store. `path` is the 3-tuple returned by get_path()."""
+        sid = store_id or self.source_store_id
+        study, series, instance = path
+        out_path = out_path or f"{sid}_{instance[-12:]}.png"
+        out = self.render(study, series, instance, sid, out_path)
+        print(f"Rendered {sid}: .../{instance[-20:]} -> {out}")
+        if show:
+            self._show(out)
+        return out
+
+    def render_index(self, index, store_id=None, out_path=None, show=True):
+        """Render the instance at `index` in a store. Plug in 0, 1, 2, ..."""
+        sid = store_id or self.source_store_id
+        path = self.get_path(index, sid)
+        out_path = out_path or f"{sid}_{index}.png"
+        return self.render_path(path, sid, out_path, show)
