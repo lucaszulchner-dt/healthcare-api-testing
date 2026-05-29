@@ -148,3 +148,56 @@ resource "google_storage_bucket_iam_member" "healthcare_sa_source_viewer" {
   role   = "roles/storage.objectViewer"
   member = "serviceAccount:${google_project_service_identity.healthcare_sa.email}"
 }
+
+# ===========================================================================
+# BURN-IN DEMO stores
+# ===========================================================================
+# Curated subset of images that have burnt-in pixel text (e.g. MIDI-B CR/US).
+# Kept separate so the de-id demo always lands on visibly-redacting images.
+
+# Source burn-in store -> streams to its own table.
+resource "google_healthcare_dicom_store" "burnin" {
+  provider = google-beta
+  name     = var.burnin_store_id
+  dataset  = google_healthcare_dataset.this.id
+  labels   = var.labels
+
+  dynamic "stream_configs" {
+    for_each = var.enable_bq_streaming ? [1] : []
+    content {
+      bigquery_destination {
+        table_uri = "bq://${var.project_id}.${google_bigquery_dataset.dicom_meta[0].dataset_id}.${var.burnin_bq_table}"
+      }
+    }
+  }
+
+  depends_on = [
+    google_bigquery_dataset.dicom_meta,
+    google_project_iam_member.healthcare_sa_bq_data_editor,
+    google_project_iam_member.healthcare_sa_bq_job_user,
+  ]
+}
+
+# De-identified burn-in copies land here -> separate table for before/after.
+# deidentify() requires this store to already exist.
+resource "google_healthcare_dicom_store" "deid_burnin" {
+  provider = google-beta
+  name     = var.deid_burnin_store_id
+  dataset  = google_healthcare_dataset.this.id
+  labels   = var.labels
+
+  dynamic "stream_configs" {
+    for_each = var.enable_bq_streaming ? [1] : []
+    content {
+      bigquery_destination {
+        table_uri = "bq://${var.project_id}.${google_bigquery_dataset.dicom_meta[0].dataset_id}.${var.deid_burnin_bq_table}"
+      }
+    }
+  }
+
+  depends_on = [
+    google_bigquery_dataset.dicom_meta,
+    google_project_iam_member.healthcare_sa_bq_data_editor,
+    google_project_iam_member.healthcare_sa_bq_job_user,
+  ]
+}

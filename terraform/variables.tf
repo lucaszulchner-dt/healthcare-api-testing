@@ -80,3 +80,28 @@ variable "deid_bq_table" {
   description = "BigQuery table name for the DE-IDENTIFIED store metadata stream."
   default     = "deid_instances"
 }
+
+# ---- Burn-in demo stores ----
+variable "burnin_store_id" {
+  type        = string
+  description = "DICOM store holding the curated burnt-in-text subset (original/identified)."
+  default     = "dicom_source_burnin"
+}
+
+variable "deid_burnin_store_id" {
+  type        = string
+  description = "DICOM store receiving de-identified copies of the burn-in subset. Must exist before calling deidentify."
+  default     = "dicom_deid_burnin"
+}
+
+variable "burnin_bq_table" {
+  type        = string
+  description = "BigQuery table name for the SOURCE burn-in store metadata stream."
+  default     = "source_burnin_instances"
+}
+
+variable "deid_burnin_bq_table" {
+  type        = string
+  description = "BigQuery table name for the DE-IDENTIFIED burn-in store metadata stream."
+  default     = "deid_burnin_instances"
+}

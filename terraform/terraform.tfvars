@@ -20,3 +20,9 @@ bq_dataset_id       = "dicom_metadata"
 bq_location         = "EU"
 source_bq_table     = "source_instances"
 deid_bq_table       = "deid_instances"
+
+# ---- Burn-in demo stores ----
+burnin_store_id      = "dicom_source_burnin"
+deid_burnin_store_id = "dicom_deid_burnin"
+burnin_bq_table      = "source_burnin_instances"
+deid_burnin_bq_table = "deid_burnin_instances"
